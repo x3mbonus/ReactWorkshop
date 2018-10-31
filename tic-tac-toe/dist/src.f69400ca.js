@@ -23124,36 +23124,30 @@ var GameCell =
 function (_super) {
   __extends(GameCell, _super);
 
-  function GameCell(props) {
-    var _this = _super.call(this, props) || this;
+  function GameCell() {
+    var _this = _super !== null && _super.apply(this, arguments) || this;
 
     _this.onClick = function () {
-      if (_this.state.currentValue) {
+      if (_this.props.value) {
         return;
       }
 
-      if (_this.props.onValueSet) {
-        _this.props.onValueSet(_this.props.i, _this.props.j);
+      console.log(_this.props.i, _this.props.j);
+
+      if (_this.props.onClick) {
+        _this.props.onClick(_this.props.i, _this.props.j);
       }
     };
 
-    _this.state = {
-      currentValue: _this.props.initialValue
-    };
     return _this;
   }
 
-  GameCell.prototype.setValue = function (value) {
-    this.setState({
-      currentValue: value
-    });
-  };
-
   GameCell.prototype.render = function () {
+    //console.log(this.props.i, this.props.j, this.props.value)
     return React.createElement("div", {
       className: "game-cell",
       onClick: this.onClick
-    }, this.state.currentValue);
+    }, this.props.value);
   };
 
   return GameCell;
@@ -23219,23 +23213,85 @@ function (_super) {
   function GameBoard(props) {
     var _this = _super.call(this, props) || this;
 
-    _this.cellValueSet = function (i, j) {
-      _this.state.cellValues[i][j] = 'a';
-    };
+    _this.getInitState = function () {
+      var cellValues = [];
 
-    var cellValues = [];
+      for (var i = 0; i < _this.props.size; i++) {
+        cellValues[i] = [];
 
-    for (var i = 0; i < _this.props.size; i++) {
-      cellValues[i] = [];
-
-      for (var j = 0; j < _this.props.size; j++) {
-        cellValues[i][j] = '';
+        for (var j = 0; j < _this.props.size; j++) {
+          cellValues[i][j] = '';
+        }
       }
-    }
 
-    _this.state = {
-      cellValues: cellValues
+      return {
+        cellValues: cellValues,
+        currentMove: 'x',
+        winner: ''
+      };
     };
+
+    _this.cellValueSet = function (i, j) {
+      if (_this.state.winner) {
+        var state = _this.getInitState();
+
+        _this.setState(state);
+
+        return;
+      }
+
+      _this.state.cellValues[i][j] = _this.state.currentMove;
+      var winner = '';
+
+      if (_this.checkWinner(j, i, _this.state.currentMove)) {
+        winner = _this.state.currentMove;
+      }
+
+      _this.setState({
+        cellValues: _this.state.cellValues,
+        currentMove: _this.state.currentMove === 'x' ? 'o' : 'x',
+        winner: winner
+      });
+    };
+
+    _this.checkWinner = function (x, y, value) {
+      for (var dx = -1; dx <= 1; dx++) {
+        for (var dy = 0; dy <= 1; dy++) {
+          if (dx == 0 && dy == 0 || dx == 1 && dy == 0) {
+            continue;
+          }
+
+          for (var offset = 0; offset < _this.props.winnerSize; offset++) {
+            if (_this.checkDirection(x, y, value, dx, dy, offset)) {
+              return true;
+            }
+          }
+        }
+      }
+
+      return false;
+    };
+
+    _this.checkDirection = function (x, y, value, dx, dy, offset) {
+      console.log("CheckDirection: (" + dx + "," + dy + "), offset " + offset);
+
+      for (var i = 0; i < _this.props.winnerSize; i++) {
+        var multiplier = i - offset;
+        var checkX = x + multiplier * dx;
+        var checkY = y + multiplier * dy;
+        console.log("   Checking cell " + checkX + "," + checkY);
+
+        if (checkX < 0 || checkY < 0 || checkX > _this.props.size - 1 || checkY > _this.props.size - 1 || _this.state.cellValues[checkY][checkX] !== value) {
+          console.log(false);
+          return false;
+        }
+      }
+
+      console.log(true);
+      return true;
+    };
+
+    _this.state = _this.getInitState();
     return _this;
   }
 
@@ -23244,7 +23300,7 @@ function (_super) {
 
     return React.createElement("div", {
       className: "game"
-    }, this.state.cellValues.map(function (row, i) {
+    }, this.state.winner ? React.createElement("h3", null, "Winner: ", this.state.winner) : React.createElement("h3", null, "Current move: ", this.state.currentMove), this.state.cellValues.map(function (row, i) {
       return React.createElement("div", {
         key: i,
         className: "game-row"
@@ -23253,8 +23309,8 @@ function (_super) {
           key: j,
           i: i,
           j: j,
-          initialValue: col,
-          onValueSet: _this.cellValueSet
+          value: col,
+          onClick: _this.cellValueSet
         });
       }));
     }));
@@ -23328,7 +23384,8 @@ function (_super) {
     return React.createElement("div", {
       className: "game-container"
     }, React.createElement("h1", null, "Tic Tac Toe"), React.createElement("h4", null, this.props.size, "x", this.props.size), React.createElement(GameBoard_1.default, {
-      size: this.props.size
+      size: this.props.size,
+      winnerSize: this.props.winnerSize
     }));
   };
 
@@ -23364,7 +23421,8 @@ var ReactDOM = __importStar(require("react-dom"));
 var GameContainer_1 = __importDefault(require("./GameContainer"));
 
 ReactDOM.render(React.createElement(GameContainer_1.default, {
-  size: 5
+  size: 5,
+  winnerSize: 3
 }), document.getElementById("root"));
 },{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","./GameContainer":"GameContainer.tsx"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -23393,7 +23451,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54659" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55024" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

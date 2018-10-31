@@ -4,6 +4,7 @@ import GameBoard from './GameBoard';
 
 export interface IGameContainerProps {
     size: number;
+    winnerSize:number;
 }
 
 
@@ -15,7 +16,7 @@ export default class GameContainer extends React.Component<IGameContainerProps, 
                 <h1>Tic Tac Toe</h1>                
                 <h4>{this.props.size}x{this.props.size}</h4>               
                 
-                <GameBoard size={this.props.size}></GameBoard>
+                <GameBoard size={this.props.size} winnerSize={this.props.winnerSize}></GameBoard>
             </div>
         );
     }

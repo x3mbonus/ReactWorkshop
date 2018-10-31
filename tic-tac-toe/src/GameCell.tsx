@@ -1,46 +1,31 @@
 import * as React from 'react';
 
 export interface IGameCellProps {
-    initialValue:string;
+    value:string;
     key:number;
     i:number;
     j:number;
-    onValueSet:Function,
+    onClick:Function,
 }
 
-export interface IGameCellState {
-    currentValue:string;
-}
-
-export default class GameCell extends React.Component<IGameCellProps, IGameCellState> {
-  constructor(props: IGameCellProps) {
-    super(props);
-
-    this.state = {
-        currentValue: this.props.initialValue
-    }
-  }
-
-  public setValue(value){
-      this.setState({
-          currentValue: value
-      });
-  }
-
+export default class GameCell extends React.Component<IGameCellProps> {
   onClick = () => {
-      if (this.state.currentValue){
+      if (this.props.value){
         return;
       }
-
-      if (this.props.onValueSet)
+      console.log(this.props.i, this.props.j);
+      if (this.props.onClick)
       {
-            this.props.onValueSet(this.props.i, this.props.j);
+            this.props.onClick(this.props.i, this.props.j);
+            
       }
     }
 
   public render() {
+      
+    //console.log(this.props.i, this.props.j, this.props.value)
     return (
-        <div className="game-cell" onClick={this.onClick}>{this.state.currentValue}</div>
+        <div className="game-cell" onClick={this.onClick}>{this.props.value}</div>
     );
   }
 }
