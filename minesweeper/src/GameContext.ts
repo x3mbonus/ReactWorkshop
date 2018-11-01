@@ -1,5 +1,16 @@
 import * as React from "react";
 
+export class ContextGameCell {
+    constructor(){};
+    hasBomb:boolean;  
+    isOpened:boolean;  
+    bombsNear?:number;
+    isMarked:boolean;
+    isEmpty(){
+        return !this.isOpened && !this.isMarked;
+    }
+}
+
 export interface IGameContext{
     fieldSize:number;
     totalBombs:number;
@@ -7,9 +18,10 @@ export interface IGameContext{
     isGameStarted:boolean;
     isGameOver:boolean;
     startGame?:Function;
-    cells?:string[][],
+    cells?:ContextGameCell[][],
     areBombsSetup:boolean,
-    click?:Function
+    openCell?:Function
+    markCell?:Function
 }
 
 export const GameContext = React.createContext<IGameContext>({

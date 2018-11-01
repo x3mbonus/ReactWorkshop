@@ -20,8 +20,8 @@ export default class GameBoard extends React.Component<IGameBoardProps> {
                         return (
                             <div key={y} className="game-row">
                                 {
-                                    row.map((col, x) => {
-                                        return <GameCell key={x} x={x} y={y} value={col}></GameCell>
+                                    row.map((cell, x) => {
+                                        return <GameCell key={x} x={x} y={y} cell={cell}></GameCell>
                                     }
                                 )}
                             </div>)

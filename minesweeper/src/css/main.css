@@ -27,12 +27,40 @@ body{
     height: 40px;
     text-align: center;
     padding-top:10px;
+    font-size: 12px;
+    font-weight: 800;
 }
 
 .game-cell:hover {
     background-color: #C5CAE9;
+    cursor: pointer;
 }
 
-.game-over {
+.game-over,
+.exploded-bomb {
     color:#F44336;
+}
+
+.marked-cell {
+    color:#FF8F00;
+}
+
+.bombs-near-1{
+    color:#0D47A1;
+}
+
+.bombs-near-2{
+    color:#1B5E20;
+}
+
+.bombs-near-3 {
+    color:#F44336;
+}
+
+.bombs-near-4,
+.bombs-near-5,
+.bombs-near-6,
+.bombs-near-7,
+.bombs-near-8,{
+    color:#880E4F;
 }

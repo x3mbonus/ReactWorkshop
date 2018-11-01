@@ -50,7 +50,10 @@ export default class GameContainer extends React.Component<IGameContainerProps, 
                 <GameContext.Consumer>
                 {
                     (context) => (
-                        <h4>{context.fieldSize}x{context.fieldSize}</h4>
+                        <div>
+                            <h3>{context.fieldSize}x{context.fieldSize}</h3>
+                            <h4>{context.leftBombs} bombs from {context.totalBombs} left</h4>
+                        </div>
                     )
                 }
                 </GameContext.Consumer>
