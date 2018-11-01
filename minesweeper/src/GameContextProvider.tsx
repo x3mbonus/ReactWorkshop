@@ -67,7 +67,7 @@ export default class GameContextProvider extends React.Component<IGameContextPro
         if (this.state.isGameOver){
             this.setState(this.getInitializedState(this.state));
             return;
-        }        
+        }
 
         if (!this.state.areBombsSetup) {
             this.setupBombs(x, y);
@@ -104,6 +104,20 @@ export default class GameContextProvider extends React.Component<IGameContextPro
             leftBombs
         });
     };
+
+    hasWon = ():boolean => {
+        let cells = this.state.cells;
+        let size =this.state.fieldSize;
+        for (let x = 0; x <= size; x++){
+            for (let y = 0; y <= size; y++){
+                let cell = cells[y][x];
+                if (!cell.isMarked && !cell.isOpened) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     setupBombs = (x, y) => {
         let bombsNumber = this.state.totalBombs;
@@ -187,8 +201,8 @@ export default class GameContextProvider extends React.Component<IGameContextPro
                     }                
                     
                     let cell = this.openCell(cellX, cellY);
-                    if (cell && cell.hasBomb) {
-                        console.log('Game over');
+                    if (!cell.isMarked && cell.hasBomb) {
+                        //console.log('Game over');
                         return false;
 
                     }
