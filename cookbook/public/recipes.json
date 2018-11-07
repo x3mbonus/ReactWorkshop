@@ -1,0 +1,11 @@
+[
+    {
+        "id": 1,
+        "title": "Spaghetti with ketchup",
+        "ingredients": [
+            "Spaghetti",
+            "Ketchup"
+        ],
+        "description": "Cook spaghetti in boiled water and serve with ketchup."
+    }
+]
