@@ -16,7 +16,7 @@ export class RecipesStore {
     }
 
     @action addRecipe = (id:number, title:string, ingredients: string[], description: string) => {
-        this.recipes = [...this.recipes, { id: id, title, ingredients, description}];
+        this.recipes = [...this.recipes, { id: id, title: title, ingredients: ingredients, description: description}];
     }
 
     @action fetchRecipes = async () => {
