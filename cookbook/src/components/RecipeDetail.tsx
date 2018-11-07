@@ -24,9 +24,8 @@ export default class RecipeDetail extends React.Component<IRecipeDetailProps, IR
   constructor(props: IRecipeDetailProps) {
     super(props);
 
-    
     this.state = {
-        isLoading: true
+        isLoading: this.props[Stores.Recipes]!.recipes.length <= 0
     }
   }
 
